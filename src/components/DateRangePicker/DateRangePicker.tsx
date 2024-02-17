@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import style from "./dateRangePicker.module.css";
 import {
   daysInLeapYear,
@@ -23,37 +23,49 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 }) => {
   const startDate = parseStartDate(start);
   const endDate = parseEndDate(end);
+  const [year, setYear] = useState(startDate.getFullYear());
+  const [month, setMonth] = useState(startDate.getMonth());
   const currentYear = startDate.getFullYear();
   const isLeapYear = currentYear % 4 === 0;
   const numberOfDays = isLeapYear
     ? daysInLeapYear[startDate.getMonth()]
     : daysInMonth[startDate.getMonth()];
 
-  const firtsDateOfMonth = getFirstDateOfMonth(startDate).getDay();
+  const firtsDateOfMonth = getFirstDateOfMonth(year, month).getDay();
   const startYear = startDate.getFullYear() - 25;
+
+  const handleYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const yearValue = e.target.value;
+    if (yearValue) {
+      setYear(Number(e.target.value));
+    }
+  };
+  const handleMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const monthValue = e.target.value;
+    if (monthValue) {
+      setMonth(Number(e.target.value));
+    }
+  };
 
   return (
     <div className={style.calendarWrapper}>
       <div className={style.yearMonthDate}>
         {startDate.toDateString()}
         <div className={style.yearMonth}>
-          <select>
-            <option>Year</option>
+          <select onChange={handleYear} defaultValue={year}>
+            <option value="">Year</option>
             {[...new Array(50)].map((_, idx) => (
-              <option
-                value={startYear + idx}
-                selected={startYear + idx === startDate.getFullYear()}
-              >
+              <option value={startYear + idx} key={`year${idx}`}>
                 {startYear + idx}
               </option>
             ))}
           </select>
-          <select>
-            <option>Month</option>
-            {months.map((month, idx) => {
+          <select onChange={handleMonth} defaultValue={month}>
+            <option value="">Month</option>
+            {months.map((value, idx) => {
               return (
-                <option value={idx} selected={idx === startDate.getMonth()}>
-                  {month}
+                <option value={idx} key={`month${idx}`}>
+                  {value}
                 </option>
               );
             })}

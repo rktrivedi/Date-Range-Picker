@@ -18,8 +18,8 @@ const months = [
   "DECEMBER",
 ];
 
-const getFirstDateOfMonth = (startDate: Date) =>
-  new Date(`${startDate.getFullYear()}-${startDate.getMonth() + 1}-01`);
+const getFirstDateOfMonth = (year: number, month: number) =>
+  new Date(`${year}-${month + 1}-01`);
 
 const getCalendarDate = (
   rowIndex: number,
