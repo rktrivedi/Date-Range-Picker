@@ -43,3 +43,23 @@
   background-color: aqua;
   font-weight: bold;
 }
+
+.rangeSelector {
+  background-color: aliceblue;
+}
+
+.activestartDate:hover {
+  background-color: aqua;
+}
+
+.yearMonth {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.yearMonthDate {
+  display: flex;
+  justify-content: space-between;
+}
