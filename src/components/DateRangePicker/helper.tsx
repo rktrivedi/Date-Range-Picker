@@ -53,7 +53,9 @@ const getActiveClass = (
   startDateIdx: number,
   numberOfDays: number,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  month: number,
+  year: number
 ) => {
   const getDate = getCalendarDate(
     rowIndex,
@@ -61,12 +63,14 @@ const getActiveClass = (
     startDateIdx,
     numberOfDays
   );
-  if (getDate === startDate.getDate() || getDate === endDate.getDate()) {
-    return style.activestartDate;
-  } else if (
-    Number(getDate) > startDate.getDate() &&
-    Number(getDate) < endDate.getDate()
+  const currDate = new Date(`${year}-${month + 1}-${getDate}`);
+
+  if (
+    currDate.toString() === startDate.toString() ||
+    currDate.toString() === endDate.toString()
   ) {
+    return style.activestartDate;
+  } else if (currDate > startDate && currDate < endDate) {
     return style.rangeSelector;
   } else {
     return "";

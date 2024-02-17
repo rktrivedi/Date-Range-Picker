@@ -27,9 +27,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const [month, setMonth] = useState(startDate.getMonth());
   const currentYear = startDate.getFullYear();
   const isLeapYear = currentYear % 4 === 0;
-  const numberOfDays = isLeapYear
-    ? daysInLeapYear[startDate.getMonth()]
-    : daysInMonth[startDate.getMonth()];
+  const numberOfDays = isLeapYear ? daysInLeapYear[month] : daysInMonth[month];
 
   const firtsDateOfMonth = getFirstDateOfMonth(year, month).getDay();
   const startYear = startDate.getFullYear() - 25;
@@ -90,7 +88,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                 firtsDateOfMonth,
                 numberOfDays,
                 startDate,
-                endDate
+                endDate,
+                month,
+                year
               )}`}
               key={`column${colIdx}`}
             >
