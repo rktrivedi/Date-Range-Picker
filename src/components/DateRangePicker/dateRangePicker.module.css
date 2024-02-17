@@ -1,0 +1,45 @@
+.calendarWrapper {
+  display: flex;
+  justify-content: center;
+  max-width: 350px;
+  min-height: 200px;
+  /* border: 1px solid; */
+  flex-direction: column;
+  gap: 5px;
+}
+
+.calendarRow {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.calendarColumn {
+  border: 1px solid black;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.calendarHeader {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendarHeader .calendarColumn:hover {
+  background-color: inherit;
+}
+
+.calendarColumn:hover {
+  background-color: aliceblue;
+}
+.activestartDate {
+  background-color: aqua;
+  font-weight: bold;
+}
