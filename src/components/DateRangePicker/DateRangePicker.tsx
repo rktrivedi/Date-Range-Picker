@@ -10,26 +10,37 @@ import {
   getFirstDateOfMonth,
   parseEndDate,
   parseStartDate,
+  parseDate,
+  getDateString,
+  getWeekends,
 } from "./helper";
 
 interface DateRangePickerProps {
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
+  onChange?: (range: [[string, string], string[]]) => void;
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({
   startDate: start,
   endDate: end,
+  onChange,
 }) => {
-  const startDate = parseStartDate(start);
-  const endDate = parseEndDate(end);
-  const [year, setYear] = useState(startDate.getFullYear());
-  const [month, setMonth] = useState(startDate.getMonth());
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    parseStartDate(start)
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(parseEndDate(end));
+  const [year, setYear] = useState(
+    startDate?.getFullYear() || new Date().getFullYear()
+  );
+  const [month, setMonth] = useState(
+    startDate?.getMonth() || new Date().getMonth()
+  );
   const isLeapYear = year % 4 === 0;
   const numberOfDays = isLeapYear ? daysInLeapYear[month] : daysInMonth[month];
 
   const firtsDateOfMonth = getFirstDateOfMonth(year, month).getDay();
-  const startYear = startDate.getFullYear() - 25;
+  const startYear = 1990;
 
   const handleYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const yearValue = e.target.value;
@@ -44,10 +55,23 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     }
   };
 
+  const handleClick = (value: Date) => {
+    if (!startDate || (startDate && endDate)) {
+      setStartDate(value);
+      setEndDate(undefined);
+    } else if (value > startDate) {
+      setEndDate(value);
+      onChange?.([
+        [getDateString(startDate), getDateString(value)],
+        getWeekends(startDate, value),
+      ]);
+    }
+  };
+
   return (
     <div className={style.calendarWrapper}>
       <div className={style.yearMonthDate}>
-        {startDate.toDateString()}
+        <span>{startDate?.toDateString()}</span>
         <div className={style.yearMonth}>
           <select onChange={handleYear} defaultValue={year}>
             <option value="">Year</option>
@@ -86,12 +110,28 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                 colIdx,
                 firtsDateOfMonth,
                 numberOfDays,
-                startDate,
-                endDate,
                 month,
-                year
+                year,
+                startDate,
+                endDate
               )}`}
               key={`column${colIdx}`}
+              onClick={() =>
+                handleClick(
+                  parseDate(
+                    Number(
+                      getCalendarDate(
+                        rowIdx,
+                        colIdx,
+                        firtsDateOfMonth,
+                        numberOfDays
+                      )
+                    ),
+                    month,
+                    year
+                  )
+                )
+              }
             >
               {getCalendarDate(rowIdx, colIdx, firtsDateOfMonth, numberOfDays)}
             </div>

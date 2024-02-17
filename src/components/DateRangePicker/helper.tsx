@@ -52,10 +52,10 @@ const getActiveClass = (
   colIndex: number,
   startDateIdx: number,
   numberOfDays: number,
-  startDate: Date,
-  endDate: Date,
   month: number,
-  year: number
+  year: number,
+  startDate?: Date,
+  endDate?: Date
 ) => {
   const getDate = getCalendarDate(
     rowIndex,
@@ -65,23 +65,31 @@ const getActiveClass = (
   );
   const currDate = new Date(`${year}-${month + 1}-${getDate}`);
 
-  if (currDate.getDay() === 0 || currDate.getDay() === 6) {
+  if (currDate.getDay() === 0 || currDate.getDay() === 6 || getDate === "") {
     return "";
   }
 
   if (
-    currDate.toString() === startDate.toString() ||
-    currDate.toString() === endDate.toString()
+    currDate.toString() === startDate?.toString() ||
+    currDate.toString() === endDate?.toString()
   ) {
     return style.activestartDate;
-  } else if (currDate > startDate && currDate < endDate) {
+  } else if (
+    startDate &&
+    endDate &&
+    currDate > startDate &&
+    currDate < endDate
+  ) {
     return style.rangeSelector;
   } else {
     return "";
   }
 };
 
-const parseStartDate = (startDate: Date) => {
+const parseStartDate = (startDate?: Date) => {
+  if (!startDate) {
+    return;
+  }
   const day = startDate.getDay();
   const offset = day === 0 ? 1 : day === 6 ? 2 : 0;
   return new Date(
@@ -91,7 +99,10 @@ const parseStartDate = (startDate: Date) => {
   );
 };
 
-const parseEndDate = (endDate: Date) => {
+const parseEndDate = (endDate?: Date) => {
+  if (!endDate) {
+    return;
+  }
   const day = endDate.getDay();
   const offset = day === 0 ? 2 : day === 6 ? 1 : 0;
   return new Date(
@@ -99,6 +110,29 @@ const parseEndDate = (endDate: Date) => {
       endDate.getDate() - offset
     }`
   );
+};
+
+const parseDate = (date: number, month: number, year: number): Date =>
+  new Date(`${year}-${month + 1}-${date}`);
+
+const getDateString = (date: Date) =>
+  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
+    .getDate()
+    .toString()
+    .padStart(2, "0")}`;
+
+const getWeekends = (startDate: Date, endDate: Date) => {
+  var weekendDates = [];
+  while (startDate <= endDate) {
+    const weekDay = startDate.getDay();
+    if ([0, 6].includes(weekDay)) {
+      weekendDates.push(getDateString(startDate));
+    }
+    var date = new Date(startDate);
+    date.setDate(date.getDate() + 1);
+    startDate = date;
+  }
+  return weekendDates;
 };
 
 export {
@@ -111,4 +145,7 @@ export {
   parseEndDate,
   getCalendarDate,
   parseStartDate,
+  parseDate,
+  getDateString,
+  getWeekends,
 };

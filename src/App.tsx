@@ -4,8 +4,11 @@ function App() {
   return (
     <div className="mainContainer">
       <DateRangePicker
-        startDate={new Date("2024-02-06")}
-        endDate={new Date("2024-02-26")}
+        // startDate={new Date("2024-02-06")}
+        // endDate={new Date("2024-02-26")}
+        onChange={(range) => {
+          console.log(range);
+        }}
       />
     </div>
   );
