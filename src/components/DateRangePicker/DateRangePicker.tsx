@@ -25,8 +25,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const endDate = parseEndDate(end);
   const [year, setYear] = useState(startDate.getFullYear());
   const [month, setMonth] = useState(startDate.getMonth());
-  const currentYear = startDate.getFullYear();
-  const isLeapYear = currentYear % 4 === 0;
+  const isLeapYear = year % 4 === 0;
   const numberOfDays = isLeapYear ? daysInLeapYear[month] : daysInMonth[month];
 
   const firtsDateOfMonth = getFirstDateOfMonth(year, month).getDay();
@@ -78,7 +77,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           </div>
         ))}
       </div>
-      {[...new Array(5)].map((_, rowIdx) => (
+      {[...new Array(6)].map((_, rowIdx) => (
         <div key={`row${rowIdx}`} className={style.calendarRow}>
           {[...new Array(7)].map((_, colIdx) => (
             <div

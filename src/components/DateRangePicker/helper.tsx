@@ -65,6 +65,10 @@ const getActiveClass = (
   );
   const currDate = new Date(`${year}-${month + 1}-${getDate}`);
 
+  if (currDate.getDay() === 0 || currDate.getDay() === 6) {
+    return "";
+  }
+
   if (
     currDate.toString() === startDate.toString() ||
     currDate.toString() === endDate.toString()

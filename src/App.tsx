@@ -5,7 +5,7 @@ function App() {
     <div className="mainContainer">
       <DateRangePicker
         startDate={new Date("2024-02-06")}
-        endDate={new Date("2024-03-31")}
+        endDate={new Date("2024-02-26")}
       />
     </div>
   );
