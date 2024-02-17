@@ -68,6 +68,14 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     }
   };
 
+  const handleRange = (day: number) => {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - day);
+    setStartDate(startDate);
+    setEndDate(endDate);
+  };
+
   return (
     <div className={style.calendarWrapper}>
       <div className={style.yearMonthDate}>
@@ -116,7 +124,10 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                 endDate
               )}`}
               key={`column${colIdx}`}
-              onClick={() =>
+              onClick={() => {
+                if ([0, 6].includes(colIdx)) {
+                  return;
+                }
                 handleClick(
                   parseDate(
                     Number(
@@ -130,14 +141,18 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     month,
                     year
                   )
-                )
-              }
+                );
+              }}
             >
               {getCalendarDate(rowIdx, colIdx, firtsDateOfMonth, numberOfDays)}
             </div>
           ))}
         </div>
       ))}
+      <div>
+        <button onClick={() => handleRange(7)}>Last 7 Days</button>
+        <button onClick={() => handleRange(30)}>Last 30 Days </button>
+      </div>
     </div>
   );
 };
