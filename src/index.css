@@ -18,3 +18,32 @@ code {
   min-height: 100vh;
   width: 100vw;
 }
+.openButton {
+  border: none;
+  border-radius: 5px;
+  width: 220px;
+  height: 25px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.openButton:hover {
+  border: 2px solid black;
+}
+.closeButton {
+  border: none;
+  border-radius: 5px;
+  width: 220px;
+  height: 25px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  margin-left: 240px;
+  margin-top: -30px;
+}
+.closeButton:hover {
+  border: 2px solid black;
+}

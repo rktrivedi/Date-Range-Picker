@@ -10,9 +10,13 @@ const YourComponent = () => {
 
   return (
     <div>
-      <button onClick={handleToggleDateRangePicker}>
-        {/* Add your calendar icon here, for example: */}
-        📅 Open Date Range Selector
+      <button
+        className={isDateRangePickerOpen ? "closeButton" : "openButton"}
+        onClick={handleToggleDateRangePicker}
+      >
+        {isDateRangePickerOpen
+          ? "📅 Close Date Range Selector"
+          : "📅 Open Date Range Selector"}
       </button>
 
       {isDateRangePickerOpen && (
