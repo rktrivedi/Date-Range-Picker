@@ -55,11 +55,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     startMonth
   ).getDay();
   const firstDateOfMonthEnd = getFirstDateOfMonth(endYear, endMonth).getDay();
+  const initialYear = 2024;
 
   const handleStartYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const yearValue = e.target.value;
     if (yearValue) {
-      setStartYear(Number(e.target.value));
+      setStartYear(startYear);
     }
   };
   const handleStartMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -100,37 +101,52 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - day);
-    setStartDate(parseStartDate(startDate));
-    setEndDate(parseEndDate(endDate));
+    const processedStartDate = parseStartDate(startDate);
+    const processedEndDate = parseEndDate(endDate);
+    const processedStartMonth = processedStartDate?.getMonth() ?? startMonth;
+    const processedEndMonth = processedEndDate?.getMonth() ?? endMonth;
+    setEndMonth(processedEndMonth);
+    setStartMonth(
+      processedEndMonth === processedStartMonth
+        ? processedEndMonth - 1
+        : processedStartMonth
+    );
+    setStartDate(processedStartDate);
+    setEndDate(processedEndDate);
+    if (processedStartDate && processedEndDate) {
+      onChange?.([
+        [getDateString(processedStartDate), getDateString(processedEndDate)],
+        getWeekends(processedStartDate, processedEndDate),
+      ]);
+    }
   };
 
   return (
     <div className={style.calendarWrapper}>
       <div className={style.mainContainer}>
         <div className={style.heading}>
-          {startDate && endDate && (
-            <span>{`${getDateString(startDate)} - ${getDateString(
-              endDate
-            )}`}</span>
-          )}
+          {(startDate && <span>{getDateString(startDate)}</span>) ||
+            "Start Date"}
+          &emsp;-&emsp;
+          {(endDate && <span>{getDateString(endDate)}</span>) || "End Date"}
         </div>
         <div className={style.box1}>
           <div className={style.dropDown}>
             <div className={style.yearMonthDate}>
-              <select onChange={handleStartYear} defaultValue={startYear}>
+              <select onChange={handleStartYear} value={startYear}>
                 <option value="">Year</option>
 
-                {[...new Array(50)].map((_, idx) => (
-                  <option value={startYear + idx} key={`year${idx}`}>
-                    {startYear + idx}
+                {[...new Array(30)].map((_, idx) => (
+                  <option value={initialYear + idx} key={`startYear${idx}`}>
+                    {initialYear + idx}
                   </option>
                 ))}
               </select>
-              <select onChange={handleStartMonth} defaultValue={startMonth}>
+              <select onChange={handleStartMonth} value={startMonth}>
                 <option value="">Month</option>
                 {months.map((value, idx) => {
                   return (
-                    <option value={idx} key={`month${idx}`}>
+                    <option value={idx} key={`startMonth${idx}`}>
                       {value}
                     </option>
                   );
@@ -165,7 +181,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                       startDate,
                       endDate
                     )}`}
-                    key={`startcolumn${colIdx}`}
+                    key={`startColumn${colIdx}`}
                     onClick={() => {
                       if ([0, 6].includes(colIdx)) {
                         return;
@@ -201,21 +217,21 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         <div className={style.seperator}></div>
         <div className={style.box2}>
           <div className={style.dropDown}>
-            <div className={style.yearMonth}>
-              <select onChange={handleEndYear} defaultValue={startYear}>
+            <div className={style.yearMonthDate}>
+              <select onChange={handleEndYear} value={endYear}>
                 <option value="">Year</option>
 
-                {[...new Array(50)].map((_, idx) => (
-                  <option value={startYear + idx} key={`endYear${idx}`}>
-                    {startYear + idx}
+                {[...new Array(30)].map((_, idx) => (
+                  <option value={initialYear + idx} key={`endYear${idx}`}>
+                    {initialYear + idx}
                   </option>
                 ))}
               </select>
-              <select onChange={handleEndMonth} defaultValue={startMonth}>
+              <select onChange={handleEndMonth} value={endMonth}>
                 <option value="">Month</option>
                 {months.map((value, idx) => {
                   return (
-                    <option value={idx} key={`endmonth${idx}`}>
+                    <option value={idx} key={`endMonth${idx}`}>
                       {value}
                     </option>
                   );
@@ -228,7 +244,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
               {[...new Array(7)].map((_, idx) => (
                 <div
                   className={style.calendarColumn}
-                  key={`endcalendarHeader${idx}`}
+                  key={`endCalendarHeader${idx}`}
                 >
                   {daysOfWeek[idx]}
                 </div>
@@ -237,7 +253,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           </div>
           <div className={style.calendarDates}>
             {[...new Array(6)].map((_, rowIdx) => (
-              <div key={`row${rowIdx}`} className={style.calendarRow}>
+              <div key={`endRow${rowIdx}`} className={style.calendarRow}>
                 {[...new Array(7)].map((_, colIdx) => (
                   <div
                     className={`${style.calendarColumn} ${getActiveClass(
@@ -245,12 +261,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                       colIdx,
                       firstDateOfMonthEnd,
                       numberOfDaysEnd,
-                      startMonth,
-                      startYear,
+                      endMonth,
+                      endYear,
                       startDate,
                       endDate
                     )}`}
-                    key={`column${colIdx}`}
+                    key={`endColumn${colIdx}`}
                     onClick={() => {
                       if ([0, 6].includes(colIdx)) {
                         return;

@@ -116,10 +116,9 @@ const parseDate = (date: number, month: number, year: number): Date =>
   new Date(`${year}-${month + 1}-${date}`);
 
 const getDateString = (date: Date) =>
-  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
-    .getDate()
+  `${date.getFullYear()}-${(date.getMonth() + 1)
     .toString()
-    .padStart(2, "0")}`;
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
 const getWeekends = (startDate: Date, endDate: Date) => {
   var weekendDates = [];
