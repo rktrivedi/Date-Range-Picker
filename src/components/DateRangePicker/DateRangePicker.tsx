@@ -60,27 +60,27 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const handleStartYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const yearValue = e.target.value;
     if (yearValue) {
-      setStartYear(startYear);
+      setStartYear(Number(yearValue) || startYear);
     }
   };
   const handleStartMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const monthValue = e.target.value;
     if (monthValue) {
-      setStartMonth(Number(e.target.value));
+      setStartMonth(Number(monthValue) || startMonth);
     }
   };
 
   const handleEndYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const yearValue = e.target.value;
     if (yearValue) {
-      setEndYear(Number(e.target.value));
+      setEndYear(Number(yearValue) || endYear);
     }
   };
 
   const handleEndMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const monthValue = e.target.value;
     if (monthValue) {
-      setEndMonth(Number(e.target.value));
+      setEndMonth(Number(monthValue) || endMonth);
     }
   };
 
@@ -111,6 +111,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         ? processedEndMonth - 1
         : processedStartMonth
     );
+    setEndYear(processedEndDate?.getFullYear() || endYear);
+    setStartYear(processedStartDate?.getFullYear() || startYear);
     setStartDate(processedStartDate);
     setEndDate(processedEndDate);
     if (processedStartDate && processedEndDate) {
