@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {DateRangePicker} from "../DateRangePicker";
 
-const YourComponent = () => {
+const OpenButton = () => {
   const [isDateRangePickerOpen, setIsDateRangePickerOpen] = useState(false);
 
   const handleToggleDateRangePicker = () => {
@@ -32,4 +32,4 @@ const YourComponent = () => {
   );
 };
 
-export default YourComponent;
+export default OpenButton;
